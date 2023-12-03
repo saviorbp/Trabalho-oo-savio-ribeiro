@@ -56,4 +56,10 @@ public class UsuarioPersistence implements Persistence<Usuario> {
 
         return allUsers;
     }
+
+    public void removeUsuario(Usuario usuario) {
+        List<Usuario> usuarios = findAll();
+        usuarios.removeIf(u -> u.getNomeUsuario().equals(usuario.getNomeUsuario()));
+        save(usuarios);
+    }
 }

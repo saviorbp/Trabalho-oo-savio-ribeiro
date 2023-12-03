@@ -11,19 +11,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TelaLogin {
-    private JFrame frame;
+public class TelaLogin extends JFrame{
+    private final int WIDTH = 300;
+    private final int HEIGHT = 200;
     private JTextField campoUsuario;
     private JPasswordField campoSenha;
     private JButton botaoLogin;
     private JButton botaoCriarUsuario;
 
     public TelaLogin() {
-        frame = new JFrame("Tela de Login");
-        frame.setSize(300, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(WIDTH, HEIGHT);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridLayout(3, 2));
 
@@ -52,7 +52,7 @@ public class TelaLogin {
 
                         new TelaTicket().setVisible(true);
 
-                        frame.dispose();
+                        dispose();
                     } catch (ValidacaoException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro de validação",
                                 JOptionPane.ERROR_MESSAGE);
@@ -69,7 +69,7 @@ public class TelaLogin {
             public void actionPerformed(ActionEvent e) {
                 TelaCriarUsuario TelaCriarUsuario = new TelaCriarUsuario();
                 TelaCriarUsuario.exibir();
-                frame.setVisible(false);
+                setVisible(false);
             }
         });
         panel.add(labelUsuario);
@@ -79,11 +79,11 @@ public class TelaLogin {
         panel.add(botaoLogin);
         panel.add(botaoCriarUsuario);
 
-        frame.getContentPane().add(panel, BorderLayout.CENTER);
+        getContentPane().add(panel, BorderLayout.CENTER);
     }
 
     public void inicia() {
-        frame.setVisible(true);
+        setVisible(true);
     }
 
 }

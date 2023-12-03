@@ -3,15 +3,12 @@ package trabalho.persistence;
 import com.google.gson.reflect.TypeToken;
 import trabalho.model.Ticket;
 import trabalho.util.Arquivo;
-import trabalho.controller.ValidaTicket;
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.DefaultListModel;
 
 public class TicketPersistence implements Persistence<Ticket> {
 

@@ -7,43 +7,47 @@ import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.List;
 
+import trabalho.controller.GerenciadorSessao;
 import trabalho.model.Ticket;
+import trabalho.model.Usuario;
 import trabalho.persistence.TicketPersistence;
+import trabalho.persistence.UsuarioPersistence;
+import trabalho.view.TelaEditarUsuario;
 
 public class TelaTicket extends JFrame {
-  private final int WIDTH = 500;
-  private final int HEIGHT = 200;
-  private JButton botaoCriarTicket;
+  private final int WIDTH = 600;
+  private final int HEIGHT = 350;
   private JList<Ticket> listaTickets = new JList<Ticket>();
 
   public TelaTicket() {
-    setTitle("Tickets");
+    setTitle("Home");
     setSize(WIDTH, HEIGHT);
     setLocationRelativeTo(null);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-    botaoCriarTicket = new JButton("Criar Ticket");
-    botaoCriarTicket.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        new TelaCriarTicket().setVisible(true);
-        dispose();
-      }
-    });
-    add(botaoCriarTicket, BorderLayout.NORTH);
+    JPanel ticketListPanel = desenhaLista();
+    JPanel ticketFunctionsPanel = desenhaFuncaoTicket();
+    JPanel userFunctionsPanel = desenhaFuncaoUsuario();
 
-    desenhaLista();
-    desenhaFormulario();
+    JPanel leftPanel = new JPanel(new GridLayout(2, 1));
+    leftPanel.add(ticketFunctionsPanel);
+    leftPanel.add(userFunctionsPanel);
+
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    mainPanel.add(ticketListPanel, BorderLayout.WEST);
+    mainPanel.add(leftPanel, BorderLayout.EAST);
+
+    getContentPane().add(mainPanel);
 
     pack();
     setVisible(true);
   }
 
-  private void desenhaLista() {
+  private JPanel desenhaLista() {
     JPanel painel = new JPanel();
     painel.setBorder(BorderFactory.createTitledBorder("Tickets"));
-    painel.setPreferredSize(new Dimension(WIDTH / 3, HEIGHT));
+    painel.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT));
     painel.setLayout(new BorderLayout());
 
     List<Ticket> tickets = new TicketPersistence().findAll();
@@ -51,7 +55,7 @@ public class TelaTicket extends JFrame {
     for (Ticket ticket : tickets) {
       model.addElement(ticket);
     }
-    
+
     listaTickets = new JList<>(model);
     listaTickets.setCellRenderer(new DefaultListCellRenderer() {
       @Override
@@ -67,20 +71,22 @@ public class TelaTicket extends JFrame {
     });
     painel.add(new JScrollPane(listaTickets), BorderLayout.CENTER);
 
-    getContentPane().add(painel, BorderLayout.WEST);
+    return painel;
   }
 
-  public Ticket getTicketSelecionado() {
-    return listaTickets.getSelectedValue();
-  }
-
-  private void desenhaFormulario() {
+  private JPanel desenhaFuncaoTicket() {
     JPanel painel = new JPanel();
-    painel.setBorder(BorderFactory.createTitledBorder("Funções"));
+    painel.setBorder(BorderFactory.createTitledBorder("Funções do Ticket"));
+    painel.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT / 2));
+    painel.setLayout(new BorderLayout());
+
+    JPanel painelBotoes = new JPanel();
+    painelBotoes.setLayout(new GridLayout(2, 1));
     JButton btnEditar;
     JButton btnDeletar;
+    JButton btnCriarTicket;
 
-    btnDeletar = new JButton("Deletar");
+    btnDeletar = new JButton("Deletar Ticket");
     btnDeletar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -101,9 +107,8 @@ public class TelaTicket extends JFrame {
         }
       }
     });
-    painel.add(btnDeletar);
 
-    btnEditar = new JButton("Editar");
+    btnEditar = new JButton("Editar Ticket");
     btnEditar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -121,13 +126,28 @@ public class TelaTicket extends JFrame {
       }
     });
 
+    btnCriarTicket = new JButton("Criar Ticket");
+    btnCriarTicket.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        new TelaCriarTicket().setVisible(true);
+        dispose();
+      }
+    });
+
     JPanel botoes = new JPanel();
     botoes.add(btnEditar);
     botoes.add(btnDeletar);
+    painelBotoes.add(botoes, BorderLayout.SOUTH);
 
-    painel.add(botoes, BorderLayout.SOUTH);
+    painel.add(btnCriarTicket, BorderLayout.NORTH);
+    painel.add(painelBotoes, BorderLayout.SOUTH);
 
-    getContentPane().add(painel, BorderLayout.CENTER);
+    return painel;
+  }
+
+  public Ticket getTicketSelecionado() {
+    return listaTickets.getSelectedValue();
   }
 
   public void deletaTicket(Ticket ticket) {
@@ -143,6 +163,60 @@ public class TelaTicket extends JFrame {
 
   public void editaTicket(Ticket ticket) {
     new TelaEditarTicket(ticket).setVisible(true);
+    dispose();
+  }
+
+  private JPanel desenhaFuncaoUsuario() {
+    JPanel painel = new JPanel();
+    painel.setBorder(BorderFactory.createTitledBorder("Funções do Usuário"));
+    painel.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT / 2));
+    painel.setLayout(new BorderLayout());
+
+    JPanel painelBotoes = new JPanel();
+    JButton btnEditar;
+    JButton btnDeletar;
+
+    btnDeletar = new JButton("Deletar Usuário");
+    btnDeletar.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        int resposta = JOptionPane.showConfirmDialog(null, "Deseja excluir o usuário?", "Confirmação",
+            JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+          try {
+            deletarUsuarioLogado();
+          } catch (Exception ex) {
+            throw new RuntimeException("Erro ao excluir o usuário", ex);
+          }
+        }
+      }
+    });
+
+    btnEditar = new JButton("Editar Usuário");
+    btnEditar.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        TelaEditarUsuario telaEditarUsuario = new TelaEditarUsuario();
+        telaEditarUsuario.mostrar();
+        dispose();
+      }
+    });
+
+    JPanel botoes = new JPanel();
+    botoes.add(btnEditar);
+    botoes.add(btnDeletar);
+    painelBotoes.add(botoes, BorderLayout.SOUTH);
+
+    painel.add(painelBotoes, BorderLayout.SOUTH);
+
+    return painel;
+  }
+
+  public void deletarUsuarioLogado() {
+    Usuario usuarioLogado = GerenciadorSessao.getUsuarioLogado();
+    UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
+    usuarioPersistence.removeUsuario(usuarioLogado);
+    new TelaLogin().setVisible(true);
     dispose();
   }
 }
