@@ -21,6 +21,8 @@ public class TelaCriarUsuario {
     public TelaCriarUsuario() {
         frame = new JFrame("Cadastro de Usuário");
         frame.setSize(300, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridLayout(4, 2));

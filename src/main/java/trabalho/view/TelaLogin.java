@@ -21,6 +21,8 @@ public class TelaLogin {
     public TelaLogin() {
         frame = new JFrame("Tela de Login");
         frame.setSize(300, 200);
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel(new GridLayout(3, 2));
@@ -48,8 +50,9 @@ public class TelaLogin {
                         Usuario usuario = new Usuario(nomeUsuario, senha, null);
                         GerenciadorSessao.setUsuarioLogado(usuario);
 
-                        JOptionPane.showMessageDialog(null, "Logado com sucesso", "Sucesso",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        new TelaTicket().setVisible(true);
+
+                        frame.dispose();
                     } catch (ValidacaoException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro de validação",
                                 JOptionPane.ERROR_MESSAGE);
@@ -82,4 +85,5 @@ public class TelaLogin {
     public void inicia() {
         frame.setVisible(true);
     }
+
 }
