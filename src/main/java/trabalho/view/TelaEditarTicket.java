@@ -9,8 +9,8 @@ import java.util.List;
 import trabalho.controller.ValidaTicket;
 import trabalho.model.Ticket;
 import trabalho.model.Usuario;
-import trabalho.persistence.UsuarioPersistence;
 import trabalho.persistence.TicketPersistence;
+import trabalho.persistence.UsuarioPersistence;
 
 public class TelaEditarTicket extends JFrame {
     private JTextField campoTitulo;
@@ -18,8 +18,10 @@ public class TelaEditarTicket extends JFrame {
     private JTextArea campoDescricao;
     private JButton botaoSalvar;
     private JButton botaoCancelar;
+    private TicketPersistence ticketPersistence;
 
     public TelaEditarTicket(Ticket ticket) {
+        ticketPersistence = new TicketPersistence();
         setTitle("Editar Ticket");
         setSize(400, 300);
         setLocationRelativeTo(null);
@@ -48,18 +50,23 @@ public class TelaEditarTicket extends JFrame {
         botaoSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ticket.setTitulo(campoTitulo.getText());
-                ticket.setDescricao(campoDescricao.getText());
-                ticket.setUsuario(usuarios.get(seletorUsuario.getSelectedIndex()));
+                try {
+                    ticket.setTitulo(campoTitulo.getText());
+                    ticket.setDescricao(campoDescricao.getText());
+                    ticket.setUsuario(usuarios.get(seletorUsuario.getSelectedIndex()));
 
-                ValidaTicket.validaTitulo(ticket.getTitulo());
-                ValidaTicket.validaDescricao(ticket.getDescricao());
-                ValidaTicket.validaUsuario(ticket.getUsuario());
+                    ValidaTicket.validaTitulo(ticket.getTitulo());
+                    ValidaTicket.validaDescricao(ticket.getDescricao());
+                    ValidaTicket.validaUsuario(ticket.getUsuario());
 
-                new TicketPersistence().update(ticket);
+                    ticketPersistence.update(ticket.getId(), ticket);
 
-                new TelaTicket().setVisible(true);
-                dispose();
+                    new TelaTicket().setVisible(true);
+                    dispose();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao editar o ticket: " + ex.getMessage(), "Erro",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         add(botaoSalvar);

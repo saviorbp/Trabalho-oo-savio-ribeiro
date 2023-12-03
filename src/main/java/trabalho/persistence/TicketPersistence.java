@@ -3,12 +3,15 @@ package trabalho.persistence;
 import com.google.gson.reflect.TypeToken;
 import trabalho.model.Ticket;
 import trabalho.util.Arquivo;
+import trabalho.controller.ValidaTicket;
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.DefaultListModel;
 
 public class TicketPersistence implements Persistence<Ticket> {
 
@@ -46,15 +49,18 @@ public class TicketPersistence implements Persistence<Ticket> {
         return tickets;
     }
 
-    public void update(Ticket ticket) {
+    public Boolean update(Number id, Ticket updatedTicket) {
         List<Ticket> tickets = findAll();
-        for (int i = 0; i < tickets.size(); i++) {
-            if (tickets.get(i).getId() == ticket.getId()) {
-                tickets.set(i, ticket);
-                break;
+        for (Ticket ticket : tickets) {
+            if (ticket.getId().equals(id)) {
+                ticket.setTitulo(updatedTicket.getTitulo());
+                ticket.setDescricao(updatedTicket.getDescricao());
+                ticket.setUsuario(updatedTicket.getUsuario());
+                save(tickets);
+                return true;
             }
         }
-        save(tickets);
+        return false;
     }
 
     public int getNextId() {

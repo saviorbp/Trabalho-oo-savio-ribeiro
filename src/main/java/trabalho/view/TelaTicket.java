@@ -11,14 +11,14 @@ import trabalho.model.Ticket;
 import trabalho.persistence.TicketPersistence;
 
 public class TelaTicket extends JFrame {
+  private final int WIDTH = 500;
+  private final int HEIGHT = 200;
   private JButton botaoCriarTicket;
-  private JList<String> listaTickets;
-  private JButton botaoExcluir;
-  private JButton botaoEditar;
+  private JList<Ticket> listaTickets = new JList<Ticket>();
 
   public TelaTicket() {
     setTitle("Tickets");
-    setSize(400, 300);
+    setSize(WIDTH, HEIGHT);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
@@ -33,46 +33,65 @@ public class TelaTicket extends JFrame {
     });
     add(botaoCriarTicket, BorderLayout.NORTH);
 
-    List<Ticket> tickets = new TicketPersistence().findAll();
+    desenhaLista();
+    desenhaFormulario();
 
+    pack();
+    setVisible(true);
+  }
+
+  private void desenhaLista() {
+    JPanel painel = new JPanel();
+    painel.setBorder(BorderFactory.createTitledBorder("Tickets"));
+    painel.setPreferredSize(new Dimension(WIDTH / 3, HEIGHT));
+    painel.setLayout(new BorderLayout());
+
+    List<Ticket> tickets = new TicketPersistence().findAll();
     DefaultListModel<Ticket> model = new DefaultListModel<>();
     for (Ticket ticket : tickets) {
       model.addElement(ticket);
     }
-    JList<Ticket> listaTickets;
-    listaTickets = new JList<Ticket>(model);
-
+    
     listaTickets = new JList<>(model);
     listaTickets.setCellRenderer(new DefaultListCellRenderer() {
       @Override
-      public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+      public Component getListCellRendererComponent(JList<?> list, Object value,
+          int index, boolean isSelected,
           boolean cellHasFocus) {
         if (value instanceof Ticket) {
           value = ((Ticket) value).getTitulo();
         }
-        return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        return super.getListCellRendererComponent(list, value, index, isSelected,
+            cellHasFocus);
       }
     });
+    painel.add(new JScrollPane(listaTickets), BorderLayout.CENTER);
 
-    add(new JScrollPane(listaTickets), BorderLayout.CENTER);
+    getContentPane().add(painel, BorderLayout.WEST);
+  }
 
-    JPanel painelBotoes = new JPanel();
+  public Ticket getTicketSelecionado() {
+    return listaTickets.getSelectedValue();
+  }
 
-    botaoExcluir = new JButton("Excluir");
-    final JList<Ticket> finalListaTickets = listaTickets;
-    botaoExcluir.addActionListener(new ActionListener() {
+  private void desenhaFormulario() {
+    JPanel painel = new JPanel();
+    painel.setBorder(BorderFactory.createTitledBorder("Funções"));
+    JButton btnEditar;
+    JButton btnDeletar;
+
+    btnDeletar = new JButton("Deletar");
+    btnDeletar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        Ticket ticketSelecionado = finalListaTickets.getSelectedValue();
+        Ticket ticketSelecionado = getTicketSelecionado();
         if (ticketSelecionado != null) {
           int resposta = JOptionPane.showConfirmDialog(null, "Deseja excluir o ticket selecionado?", "Confirmação",
               JOptionPane.YES_NO_OPTION);
           if (resposta == JOptionPane.YES_OPTION) {
             try {
-              model.removeElement(ticketSelecionado);
-
-              List<Ticket> tickets = Collections.list(model.elements());
-              new TicketPersistence().save(tickets);
+              deletaTicket(ticketSelecionado);
+              atualizaListaTicket();
             } catch (Exception ex) {
               throw new RuntimeException("Erro ao excluir o ticket", ex);
             }
@@ -82,28 +101,48 @@ public class TelaTicket extends JFrame {
         }
       }
     });
-    painelBotoes.add(botaoExcluir);
+    painel.add(btnDeletar);
 
-    botaoEditar = new JButton("Editar");
-    botaoEditar.addActionListener(new ActionListener() {
+    btnEditar = new JButton("Editar");
+    btnEditar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        Ticket ticketSelecionado = finalListaTickets.getSelectedValue();
+        Ticket ticketSelecionado = getTicketSelecionado();
         if (ticketSelecionado != null) {
           int resposta = JOptionPane.showConfirmDialog(null, "Deseja editar o ticket selecionado?", "Confirmação",
               JOptionPane.YES_NO_OPTION);
           if (resposta == JOptionPane.YES_OPTION) {
-            // Abre a tela de edição de tickets
-            new TelaEditarTicket(ticketSelecionado).setVisible(true);
+            editaTicket(ticketSelecionado);
           }
         } else {
-          JOptionPane.showMessageDialog(null, "Nenhum ticket selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(null, "Nenhum ticket selecionado", "Erro",
+              JOptionPane.ERROR_MESSAGE);
         }
       }
     });
-    painelBotoes.add(botaoEditar);
-    add(painelBotoes, BorderLayout.SOUTH);
 
-    setVisible(true);
+    JPanel botoes = new JPanel();
+    botoes.add(btnEditar);
+    botoes.add(btnDeletar);
+
+    painel.add(botoes, BorderLayout.SOUTH);
+
+    getContentPane().add(painel, BorderLayout.CENTER);
+  }
+
+  public void deletaTicket(Ticket ticket) {
+    DefaultListModel<Ticket> model = (DefaultListModel<Ticket>) listaTickets.getModel();
+    model.removeElement(ticket);
+  }
+
+  public void atualizaListaTicket() {
+    DefaultListModel<Ticket> model = (DefaultListModel<Ticket>) listaTickets.getModel();
+    List<Ticket> tickets = Collections.list(model.elements());
+    new TicketPersistence().save(tickets);
+  }
+
+  public void editaTicket(Ticket ticket) {
+    new TelaEditarTicket(ticket).setVisible(true);
+    dispose();
   }
 }

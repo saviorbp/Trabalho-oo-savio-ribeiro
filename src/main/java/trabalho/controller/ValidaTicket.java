@@ -21,4 +21,17 @@ public class ValidaTicket {
       throw new IllegalArgumentException("O usuário do ticket não pode ser em vazia");
     }
   }
+
+  public static void ticketNaoEncontrado(Number id) {
+    if (id == null) {
+      throw new IllegalArgumentException("Ticket não encontrado");
+    }
+    return;
+  }
+  public static void editarTicketError(String ex) {
+    if (ex != null) {
+      throw new IllegalArgumentException("Erro ao editar o ticket" + ex);
+    }
+    return;
+  }
 }

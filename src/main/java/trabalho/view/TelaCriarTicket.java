@@ -49,7 +49,7 @@ public class TelaCriarTicket extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Ticket ticket = new Ticket();
-                ticket.setId(new TicketPersistence().getNextId()); // Adicione esta linha
+                ticket.setId(new TicketPersistence().getNextId()); 
                 ticket.setTitulo(campoTitulo.getText());
                 ticket.setDescricao(campoDescricao.getText());
                 ticket.setUsuario(usuarios.get(seletorUsuario.getSelectedIndex()));
