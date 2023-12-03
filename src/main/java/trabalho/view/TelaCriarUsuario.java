@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 import trabalho.controller.ValidarUsuario;
+import trabalho.exception.ValidacaoException;
 import trabalho.model.PerfilUsuario;
 import trabalho.model.Usuario;
 import trabalho.persistence.UsuarioPersistence;
@@ -38,33 +39,31 @@ public class TelaCriarUsuario {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
-                String nomeUsuario = campoUsuario.getText();
-                String senha = new String(campoSenha.getPassword());
+                try {
+                    String nomeUsuario = campoUsuario.getText();
+                    String senha = new String(campoSenha.getPassword());
+                    PerfilUsuario perfil = (PerfilUsuario) campoPerfil.getSelectedItem();
 
-                if (!ValidarUsuario.validarNomeUsuario(nomeUsuario)) {
-                    JOptionPane.showMessageDialog(null, "O nome de usuário deve conter apenas letras", "Erro",
+                    List<Usuario> usuarios = usuarioPersistence.findAll();
+
+                    ValidarUsuario.validarNomeUsuario(nomeUsuario);
+                    ValidarUsuario.validarSenha(senha);
+                    ValidarUsuario.validarUsuarioExistente(nomeUsuario, usuarios);
+
+                    Usuario usuario = new Usuario();
+                    usuario.setNomeUsuario(nomeUsuario);
+                    usuario.setSenha(senha);
+                    usuario.setPerfil(perfil);
+
+                    usuarios.add(usuario);
+                    usuarioPersistence.save(usuarios);
+
+                    campoUsuario.setText("");
+                    campoSenha.setText("");
+                } catch (ValidacaoException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro de validação",
                             JOptionPane.ERROR_MESSAGE);
-                    return;
                 }
-
-                if (!ValidarUsuario.validarSenha(senha)) {
-                    JOptionPane.showMessageDialog(null,
-                            "A senha deve ter pelo menos 8 caracteres, conter pelo menos uma letra maiúscula e um caractere especial",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                Usuario usuario = new Usuario();
-                usuario.setNomeUsuario(campoUsuario.getText());
-                usuario.setSenha(new String(campoSenha.getPassword()));
-                usuario.setPerfil((PerfilUsuario) campoPerfil.getSelectedItem());
-
-                List<Usuario> usuarios = usuarioPersistence.findAll();
-                usuarios.add(usuario);
-
-                usuarioPersistence.save(usuarios);
-
-                campoUsuario.setText("");
-                campoSenha.setText("");
                 campoPerfil.setSelectedIndex(0);
 
                 JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
@@ -105,9 +104,4 @@ public class TelaCriarUsuario {
         return (PerfilUsuario) campoPerfil.getSelectedItem();
     }
 
-    public void adicionarUsuario(String nomeUsuario, String senha, PerfilUsuario perfil) {
-        System.out.println("Usuário: " + nomeUsuario);
-        System.out.println("Senha: " + senha);
-        System.out.println("Perfil: " + perfil);
-    }
 }
