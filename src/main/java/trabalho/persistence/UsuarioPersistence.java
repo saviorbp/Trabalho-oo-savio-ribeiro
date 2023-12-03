@@ -1,6 +1,8 @@
 package trabalho.persistence;
 
 import com.google.gson.reflect.TypeToken;
+
+import trabalho.controller.GerenciadorSessao;
 import trabalho.model.Usuario;
 import trabalho.util.Arquivo;
 
@@ -44,5 +46,14 @@ public class UsuarioPersistence implements Persistence<Usuario> {
         }
 
         return usuarios;
+    }
+
+    public List<Usuario> findAllExceptLoggedIn() {
+        List<Usuario> allUsers = findAll();
+        Usuario loggedInUser = GerenciadorSessao.getUsuarioLogado();
+        
+        allUsers.removeIf(usuario -> usuario.getNomeUsuario().equals(loggedInUser.getNomeUsuario()));
+
+        return allUsers;
     }
 }

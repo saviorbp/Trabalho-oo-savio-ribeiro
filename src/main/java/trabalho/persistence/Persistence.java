@@ -2,10 +2,11 @@ package trabalho.persistence;
 
 import java.util.List;
 
-public interface Persistence<Usuario> {
+public interface Persistence<Generic> {
 
     String DIRECTORY = "data";
-    public void save(List<Usuario> itens);
-    public List<Usuario> findAll();
+    public void save(List<Generic> itens);
+    public List<Generic> findAll();
 
 }
+
