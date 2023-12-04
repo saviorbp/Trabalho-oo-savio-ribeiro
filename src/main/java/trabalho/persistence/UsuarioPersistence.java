@@ -27,6 +27,21 @@ public class UsuarioPersistence implements Persistence<Usuario> {
 
         Arquivo.salva(PATH, json);
     }
+   
+    public Boolean update(Number id, Usuario updatedUsuario) {
+        List<Usuario> usuarios = findAll();
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId().equals(id)) {
+                usuario.setNomeUsuario(updatedUsuario.getNomeUsuario());
+                usuario.setSenha(updatedUsuario.getSenha());
+                usuario.setPerfil(updatedUsuario.getPerfil());
+                save(usuarios);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public List<Usuario> findAll() {
@@ -48,10 +63,20 @@ public class UsuarioPersistence implements Persistence<Usuario> {
         return usuarios;
     }
 
+    public Usuario findByName(String nomeUsuario) {
+        List<Usuario> usuarios = findAll();
+        for (Usuario usuario : usuarios) {
+            if (usuario.getNomeUsuario().equals(nomeUsuario)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
     public List<Usuario> findAllExceptLoggedIn() {
         List<Usuario> allUsers = findAll();
         Usuario loggedInUser = GerenciadorSessao.getUsuarioLogado();
-        
+
         allUsers.removeIf(usuario -> usuario.getNomeUsuario().equals(loggedInUser.getNomeUsuario()));
 
         return allUsers;
@@ -61,5 +86,21 @@ public class UsuarioPersistence implements Persistence<Usuario> {
         List<Usuario> usuarios = findAll();
         usuarios.removeIf(u -> u.getNomeUsuario().equals(usuario.getNomeUsuario()));
         save(usuarios);
+    }
+
+    public void deletarUsuarioLogado() {
+        Usuario usuarioLogado = GerenciadorSessao.getUsuarioLogado();
+        removeUsuario(usuarioLogado);
+    }
+
+    public int getNextId() {
+        List<Usuario> usuarios = findAll();
+        int maxId = 0;
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId().intValue() > maxId) {
+                maxId = usuario.getId().intValue();
+            }
+        }
+        return maxId + 1;
     }
 }

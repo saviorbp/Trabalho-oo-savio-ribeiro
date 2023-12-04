@@ -184,7 +184,10 @@ public class TelaTicket extends JFrame {
             JOptionPane.YES_NO_OPTION);
         if (resposta == JOptionPane.YES_OPTION) {
           try {
-            deletarUsuarioLogado();
+            UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
+            usuarioPersistence.deletarUsuarioLogado();
+            new TelaLogin().setVisible(true);
+            dispose();
           } catch (Exception ex) {
             throw new RuntimeException("Erro ao excluir o usuário", ex);
           }
@@ -196,8 +199,11 @@ public class TelaTicket extends JFrame {
     btnEditar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        TelaEditarUsuario telaEditarUsuario = new TelaEditarUsuario();
-        telaEditarUsuario.mostrar();
+        Usuario usuarioLogado = GerenciadorSessao.getUsuarioLogado();
+        System.out.println(usuarioLogado.getPerfil());
+        
+        TelaEditarUsuario telaEditarUsuario = new TelaEditarUsuario(usuarioLogado);
+        telaEditarUsuario.exibir();
         dispose();
       }
     });
@@ -212,11 +218,4 @@ public class TelaTicket extends JFrame {
     return painel;
   }
 
-  public void deletarUsuarioLogado() {
-    Usuario usuarioLogado = GerenciadorSessao.getUsuarioLogado();
-    UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
-    usuarioPersistence.removeUsuario(usuarioLogado);
-    new TelaLogin().setVisible(true);
-    dispose();
-  }
 }

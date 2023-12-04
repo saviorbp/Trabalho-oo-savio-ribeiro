@@ -53,6 +53,7 @@ public class TelaCriarUsuario {
                     ValidarUsuario.validarUsuarioExistente(nomeUsuario, usuarios);
 
                     Usuario usuario = new Usuario();
+                    usuario.setId(new UsuarioPersistence().getNextId());
                     usuario.setNomeUsuario(nomeUsuario);
                     usuario.setSenha(senha);
                     usuario.setPerfil(perfil);

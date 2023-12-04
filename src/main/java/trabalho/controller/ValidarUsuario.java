@@ -29,8 +29,8 @@ public class ValidarUsuario {
   }
 
   public static void validarNomeUsuario(String nomeUsuario) throws ValidacaoException {
-    if (!nomeUsuario.matches("[a-zA-Z]+")) {
-      throw new ValidacaoException("O nome de usuário deve conter apenas letras");
+    if (nomeUsuario.length() < 5) {
+      throw new ValidacaoException("O nome de usuário deve conter no mínimo 5 caracteres");
     }
   }
 

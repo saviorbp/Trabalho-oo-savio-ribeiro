@@ -2,6 +2,7 @@ package trabalho.model;
 
 public class Usuario {
 
+  private Integer id;
   private String nomeUsuario;
   private String senha;
   private PerfilUsuario perfil;
@@ -10,6 +11,7 @@ public class Usuario {
   }
 
   public Usuario(String nomeUsuario, String senha, PerfilUsuario perfil) {
+    this.id = id;
     this.nomeUsuario = nomeUsuario;
     this.senha = senha;
     this.perfil = perfil;
@@ -29,6 +31,14 @@ public class Usuario {
 
   public void setSenha(String senha) {
     this.senha = senha;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public PerfilUsuario getPerfil() {
