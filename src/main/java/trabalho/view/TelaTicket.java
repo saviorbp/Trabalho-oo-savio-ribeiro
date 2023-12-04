@@ -173,8 +173,10 @@ public class TelaTicket extends JFrame {
     painel.setLayout(new BorderLayout());
 
     JPanel painelBotoes = new JPanel();
+    painelBotoes.setLayout(new GridLayout(2, 1));
     JButton btnEditar;
     JButton btnDeletar;
+    JButton btnLogout;
 
     btnDeletar = new JButton("Deletar Usuário");
     btnDeletar.addActionListener(new ActionListener() {
@@ -201,18 +203,29 @@ public class TelaTicket extends JFrame {
       public void actionPerformed(ActionEvent e) {
         Usuario usuarioLogado = GerenciadorSessao.getUsuarioLogado();
         System.out.println(usuarioLogado.getPerfil());
-        
+
         TelaEditarUsuario telaEditarUsuario = new TelaEditarUsuario(usuarioLogado);
         telaEditarUsuario.exibir();
         dispose();
       }
     });
 
+    btnLogout = new JButton("Logout");
+    btnLogout.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        GerenciadorSessao.encerrarSessao();
+        new TelaLogin().setVisible(true);
+        dispose();
+      }
+    });
+    
     JPanel botoes = new JPanel();
     botoes.add(btnEditar);
     botoes.add(btnDeletar);
     painelBotoes.add(botoes, BorderLayout.SOUTH);
-
+    
+    painel.add(btnLogout, BorderLayout.NORTH);
     painel.add(painelBotoes, BorderLayout.SOUTH);
 
     return painel;

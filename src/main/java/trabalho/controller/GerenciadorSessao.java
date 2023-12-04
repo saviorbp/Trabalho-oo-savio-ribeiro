@@ -10,4 +10,12 @@ public class GerenciadorSessao {
     public static Usuario getUsuarioLogado() {
         return usuarioLogado;
     }
+
+    public static void encerrarSessao() {
+        usuarioLogado = null;
+    }
+
+    public static boolean isUsuarioLogado() {
+        return usuarioLogado != null;
+    }
 }
