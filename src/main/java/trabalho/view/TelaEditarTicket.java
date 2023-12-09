@@ -6,9 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import trabalho.controller.GerenciadorSessao;
 import trabalho.controller.ValidaTicket;
-import trabalho.model.Ticket;
-import trabalho.model.Usuario;
+import trabalho.model.Tickets.Ticket;
+import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.TicketPersistence;
 import trabalho.persistence.UsuarioPersistence;
 
@@ -26,7 +27,7 @@ public class TelaEditarTicket extends JFrame {
         setSize(400, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(5, 2));
+        setLayout(new GridLayout(7, 2));
 
         add(new JLabel("Título:"));
         campoTitulo = new JTextField(ticket.getTitulo());
@@ -37,10 +38,24 @@ public class TelaEditarTicket extends JFrame {
         List<Usuario> usuarios = usuarioPersistence.findAllExceptLoggedIn();
         seletorUsuario = new JComboBox<>();
         for (Usuario usuario : usuarios) {
-            seletorUsuario.addItem(usuario.getNomeUsuario());
+            seletorUsuario.addItem(usuario.getNome());
         }
-        seletorUsuario.setSelectedItem(ticket.getUsuario().getNomeUsuario());
+        Usuario usuarioVinculado = usuarioPersistence.findById(ticket.getIdUsuarioVinculado());
+
+        if (usuarioVinculado != null) {
+            seletorUsuario.setSelectedItem(usuarioVinculado.getNome());
+        }
         add(seletorUsuario);
+
+        add(new JLabel("Categoria:"));
+        JLabel labelCategoria = new JLabel(ticket.getCategoria().getNome()); 
+                                                                            
+        add(labelCategoria);
+
+        add(new JLabel("Subcategoria:"));
+        JLabel labelSubcategoria = new JLabel(ticket.getSubcategoria().getNome()); 
+                                                                         
+        add(labelSubcategoria);
 
         add(new JLabel("Descrição:"));
         campoDescricao = new JTextArea(ticket.getDescricao());
@@ -53,11 +68,12 @@ public class TelaEditarTicket extends JFrame {
                 try {
                     ticket.setTitulo(campoTitulo.getText());
                     ticket.setDescricao(campoDescricao.getText());
-                    ticket.setUsuario(usuarios.get(seletorUsuario.getSelectedIndex()));
+                    ticket.setIdUsuarioCriou(GerenciadorSessao.getIdUsuarioLogado());
+                    ticket.setIdUsuarioVinculado(usuarios.get(seletorUsuario.getSelectedIndex()).getId());
 
                     ValidaTicket.validaTitulo(ticket.getTitulo());
                     ValidaTicket.validaDescricao(ticket.getDescricao());
-                    ValidaTicket.validaUsuario(ticket.getUsuario());
+                    ValidaTicket.validaUsuarioVinculado(ticket.getIdUsuarioVinculado());
 
                     ticketPersistence.update(ticket.getId(), ticket);
 

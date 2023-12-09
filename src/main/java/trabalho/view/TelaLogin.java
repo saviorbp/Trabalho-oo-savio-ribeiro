@@ -3,10 +3,10 @@ package trabalho.view;
 import javax.swing.*;
 
 import trabalho.controller.GerenciadorSessao;
-import trabalho.model.Usuario;
 import trabalho.persistence.UsuarioPersistence;
 import trabalho.controller.ValidarUsuario;
 import trabalho.exception.ValidacaoException;
+import trabalho.model.Usuarios.Usuario;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 public class TelaLogin extends JFrame {
     private final int WIDTH = 300;
     private final int HEIGHT = 200;
-    private JTextField campoUsuario;
+    private JTextField campoEmail;
     private JPasswordField campoSenha;
     private JButton botaoLogin;
     private JButton botaoCriarUsuario;
@@ -28,8 +28,8 @@ public class TelaLogin extends JFrame {
 
         JPanel panel = new JPanel(new GridLayout(3, 2));
 
-        JLabel labelUsuario = new JLabel("Usuário:");
-        campoUsuario = new JTextField();
+        JLabel labelEmail = new JLabel("Email:");
+        campoEmail = new JTextField();
 
         JLabel labelSenha = new JLabel("Senha:");
         campoSenha = new JPasswordField();
@@ -38,30 +38,22 @@ public class TelaLogin extends JFrame {
         botaoLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String email = campoEmail.getText();
+                String senha = new String(campoSenha.getPassword());
+
                 try {
-                    String nomeUsuario = campoUsuario.getText();
-                    String senha = new String(campoSenha.getPassword());
+                    ValidarUsuario.validarLogin(email, senha);
+                    UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
+                    Usuario usuario = usuarioPersistence.findByEmail(email);
 
-                    ValidarUsuario.validarNomeUsuario(nomeUsuario);
-                    ValidarUsuario.validarSenha(senha);
+                    if (email != null && usuario.getSenha().equals(senha)) {
+                        GerenciadorSessao.setUsuarioLogado(usuario);
 
-                    try {
-                        ValidarUsuario.validar(nomeUsuario, senha);
-                        UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
-                        Usuario usuario = usuarioPersistence.findByName(nomeUsuario);
+                        new TelaTicket().setVisible(true);
 
-                        if (usuario != null && usuario.getSenha().equals(senha)) {
-                            GerenciadorSessao.setUsuarioLogado(usuario);
-
-                            new TelaTicket().setVisible(true);
-
-                            dispose();
-                        } else {
-                            throw new ValidacaoException("Nome de usuário ou senha inválidos");
-                        }
-                    } catch (ValidacaoException ex) {
-                        JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro de validação",
-                                JOptionPane.ERROR_MESSAGE);
+                        dispose();
+                    } else {
+                        throw new ValidacaoException("Nome de usuário ou senha inválidos");
                     }
                 } catch (ValidacaoException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro de validação",
@@ -78,8 +70,8 @@ public class TelaLogin extends JFrame {
                 setVisible(false);
             }
         });
-        panel.add(labelUsuario);
-        panel.add(campoUsuario);
+        panel.add(labelEmail);
+        panel.add(campoEmail);
         panel.add(labelSenha);
         panel.add(campoSenha);
         panel.add(botaoLogin);

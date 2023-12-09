@@ -7,9 +7,8 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 import trabalho.controller.ValidarUsuario;
-import trabalho.exception.ValidacaoException;
-import trabalho.model.PerfilUsuario;
-import trabalho.model.Usuario;
+import trabalho.model.Usuarios.PerfilUsuario;
+import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.UsuarioPersistence;
 
 public class TelaCriarUsuario {
@@ -20,73 +19,88 @@ public class TelaCriarUsuario {
 
     public TelaCriarUsuario() {
         frame = new JFrame("Cadastro de Usuário");
-        frame.setSize(300, 200);
+        frame.setSize(350, 500);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel(new GridLayout(4, 2));
+        JPanel panel = new JPanel(new GridLayout(7, 2));
 
-        JLabel labelUsuario = new JLabel("Usuário:");
-        campoUsuario = new JTextField();
+        JLabel labelNome = new JLabel("Nome:");
+        JTextField campoNome = new JTextField();
+
+        JLabel labelSobrenome = new JLabel("Sobrenome:");
+        JTextField campoSobrenome = new JTextField();
+
+        JLabel labelEmail = new JLabel("Email:");
+        JTextField campoEmail = new JTextField();
+
+        JLabel labelCpf = new JLabel("CPF:");
+        JTextField campoCpf = new JTextField();
 
         JLabel labelSenha = new JLabel("Senha:");
-        campoSenha = new JPasswordField();
+        JPasswordField campoSenha = new JPasswordField();
 
         JLabel labelPerfil = new JLabel("Perfil:");
-        campoPerfil = new JComboBox<>(PerfilUsuario.values());
+        JComboBox<PerfilUsuario> campoPerfil = new JComboBox<>(PerfilUsuario.values());
 
+        JButton botaoCancelar = new JButton("Cancelar");
+        botaoCancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new TelaLogin().setVisible(true);
+                frame.dispose();
+            }
+        });
         JButton botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
                 try {
-                    String nomeUsuario = campoUsuario.getText();
-                    String senha = new String(campoSenha.getPassword());
-                    PerfilUsuario perfil = (PerfilUsuario) campoPerfil.getSelectedItem();
+                    Usuario novoUsuario = new Usuario();
+                    novoUsuario.setId(usuarioPersistence.getNextId());
+                    novoUsuario.setNome(campoNome.getText());
+                    novoUsuario.setSobrenome(campoSobrenome.getText());
+                    novoUsuario.setEmail(campoEmail.getText());
+                    novoUsuario.setCpf(campoCpf.getText());
+                    novoUsuario.setSenha(new String(campoSenha.getPassword()));
+                    novoUsuario.setPerfil((PerfilUsuario) campoPerfil.getSelectedItem());
+
+                    ValidarUsuario.validar(novoUsuario);
 
                     List<Usuario> usuarios = usuarioPersistence.findAll();
-
-                    ValidarUsuario.validarNomeUsuario(nomeUsuario);
-                    ValidarUsuario.validarSenha(senha);
-                    ValidarUsuario.validarUsuarioExistente(nomeUsuario, usuarios);
-
-                    Usuario usuario = new Usuario();
-                    usuario.setId(new UsuarioPersistence().getNextId());
-                    usuario.setNomeUsuario(nomeUsuario);
-                    usuario.setSenha(senha);
-                    usuario.setPerfil(perfil);
-
-                    usuarios.add(usuario);
+                    usuarios.add(novoUsuario);
                     usuarioPersistence.save(usuarios);
+                    
+                    JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+                    new TelaLogin().setVisible(true);
+                    frame.dispose();
 
-                    campoUsuario.setText("");
-                    campoSenha.setText("");
-                } catch (ValidacaoException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro de validação",
-                            JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
-                campoPerfil.setSelectedIndex(0);
-
-                JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
-
-                frame.dispose();
-
-                TelaLogin telaLogin = new TelaLogin();
-                telaLogin.inicia();
-                frame.setVisible(false);
-
             }
         });
 
-        panel.add(labelUsuario);
-        panel.add(campoUsuario);
+        panel.add(labelNome);
+        panel.add(campoNome);
+        panel.add(labelSobrenome);
+        panel.add(campoSobrenome);
+        panel.add(labelEmail);
+        panel.add(campoEmail);
+        panel.add(labelCpf);
+        panel.add(campoCpf);
         panel.add(labelSenha);
         panel.add(campoSenha);
         panel.add(labelPerfil);
         panel.add(campoPerfil);
         panel.add(botaoCadastrar);
+        panel.add(botaoCancelar);
+
+        frame.add(panel);
+        frame.pack();
+        frame.setVisible(true);
 
         frame.getContentPane().add(panel, BorderLayout.CENTER);
     }

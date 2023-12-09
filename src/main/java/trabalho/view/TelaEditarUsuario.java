@@ -8,13 +8,16 @@ import java.util.List;
 
 import trabalho.controller.ValidarUsuario;
 import trabalho.exception.ValidacaoException;
-import trabalho.model.PerfilUsuario;
-import trabalho.model.Usuario;
+import trabalho.model.Usuarios.PerfilUsuario;
+import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.UsuarioPersistence;
 
 public class TelaEditarUsuario {
     private JFrame frame;
-    private JTextField campoUsuario;
+    private JTextField campoNome;
+    private JTextField campoSobrenome;
+    private JTextField campoEmail;
+    private JTextField campoCpf;
     private JPasswordField campoSenha;
     private JComboBox<PerfilUsuario> campoPerfil;
     UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
@@ -26,11 +29,19 @@ public class TelaEditarUsuario {
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel panel = new JPanel(new GridLayout(7, 2));
 
-        JPanel panel = new JPanel(new GridLayout(4, 2));
+        JLabel labelNome = new JLabel("Nome:");
+        campoNome = new JTextField(usuarioLogado.getNome());
 
-        JLabel labelUsuario = new JLabel("Usuário:");
-        campoUsuario = new JTextField(usuarioLogado.getNomeUsuario());
+        JLabel labelSobrenome = new JLabel("Sobrenome:");
+        campoSobrenome = new JTextField(usuarioLogado.getSobrenome());
+
+        JLabel labelEmail = new JLabel("Email:");
+        campoEmail = new JTextField(usuarioLogado.getEmail());
+
+        JLabel labelCpf = new JLabel("CPF:");
+        campoCpf = new JTextField(usuarioLogado.getCpf());
 
         JLabel labelSenha = new JLabel("Senha:");
         campoSenha = new JPasswordField(usuarioLogado.getSenha());
@@ -49,29 +60,56 @@ public class TelaEditarUsuario {
             public void actionPerformed(ActionEvent e) {
                 UsuarioPersistence usuarioPersistence = new UsuarioPersistence();
                 try {
-                    String nomeUsuario = campoUsuario.getText();
+                    Usuario novoUsuario = new Usuario();
+                    boolean isEdited = false;
+
+                    String nome = campoNome.getText();
+                    if (!nome.equals(usuarioLogado.getNome())) {
+                        ValidarUsuario.validarNome(nome); 
+                        isEdited = true;
+                    }
+
+                    String sobrenome = campoSobrenome.getText();
+                    if (!sobrenome.equals(usuarioLogado.getSobrenome())) {
+                        ValidarUsuario.validarSobrenome(sobrenome);
+                        isEdited = true;
+                    }
+
+                    String email = campoEmail.getText();
+                    if (!email.equals(usuarioLogado.getEmail())) {
+                        ValidarUsuario.validarEmail(email);
+                        isEdited = true;
+                    }
+
+                    String cpf = campoCpf.getText();
+                    if (!cpf.equals(usuarioLogado.getCpf())) {
+                        ValidarUsuario.validarCpf(cpf);
+                        isEdited = true;
+                    }
+                    
                     String senha = new String(campoSenha.getPassword());
-                    PerfilUsuario perfil = (PerfilUsuario) campoPerfil.getSelectedItem();
-
-                    if (!nomeUsuario.equals(usuarioLogado.getNomeUsuario()) ||
-                            !senha.equals(usuarioLogado.getSenha()) ||
-                            !perfil.equals(usuarioLogado.getPerfil())) {
-
-                        ValidarUsuario.validarNomeUsuario(nomeUsuario);
+                    if (!senha.equals(usuarioLogado.getSenha())) {
                         ValidarUsuario.validarSenha(senha);
+                        isEdited = true;
+                    }
+                    
+                    PerfilUsuario perfil = (PerfilUsuario) campoPerfil.getSelectedItem();
+                    if (!perfil.equals(usuarioLogado.getPerfil())) {
+                        isEdited = true;
+                    }
+                    
+                    if (isEdited) {
+                        novoUsuario.setNome(nome);
+                        novoUsuario.setSobrenome(sobrenome);
+                        novoUsuario.setEmail(email);
+                        novoUsuario.setCpf(cpf);
+                        novoUsuario.setSenha(senha);
+                        novoUsuario.setPerfil(perfil);
+                        usuarioPersistence.update(usuarioLogado.getId(), novoUsuario);
+                        frame.dispose();
+                        TelaTicket telaTicket = new TelaTicket();
+                        telaTicket.setVisible(true);
 
-                        Usuario usuarioAtualizado = new Usuario();
-                        usuarioAtualizado.setId(usuarioLogado.getId());
-                        usuarioAtualizado.setNomeUsuario(nomeUsuario);
-                        usuarioAtualizado.setSenha(senha);
-                        usuarioAtualizado.setPerfil(perfil);
-
-                        usuarioPersistence.update(usuarioAtualizado.getId(), usuarioAtualizado);
-
-                        JOptionPane.showMessageDialog(null, "Usuário atualizado com sucesso!");
-
-                        TelaLogin telaLogin = new TelaLogin();
-                        telaLogin.setVisible(true);
                     } else {
                         TelaTicket telaTicket = new TelaTicket();
                         telaTicket.setVisible(true);
@@ -95,8 +133,14 @@ public class TelaEditarUsuario {
             }
         });
 
-        panel.add(labelUsuario);
-        panel.add(campoUsuario);
+        panel.add(labelNome);
+        panel.add(campoNome);
+        panel.add(labelSobrenome);
+        panel.add(campoSobrenome);
+        panel.add(labelEmail);
+        panel.add(campoEmail);
+        panel.add(labelCpf);
+        panel.add(campoCpf);
         panel.add(labelSenha);
         panel.add(campoSenha);
         panel.add(labelPerfil);

@@ -3,7 +3,7 @@ package trabalho.persistence;
 import com.google.gson.reflect.TypeToken;
 
 import trabalho.controller.GerenciadorSessao;
-import trabalho.model.Usuario;
+import trabalho.model.Usuarios.Usuario;
 import trabalho.util.Arquivo;
 
 import java.io.File;
@@ -32,7 +32,9 @@ public class UsuarioPersistence implements Persistence<Usuario> {
         List<Usuario> usuarios = findAll();
         for (Usuario usuario : usuarios) {
             if (usuario.getId().equals(id)) {
-                usuario.setNomeUsuario(updatedUsuario.getNomeUsuario());
+                usuario.setNome(updatedUsuario.getNome());
+                usuario.setSobrenome(updatedUsuario.getSobrenome());
+                usuario.setEmail(updatedUsuario.getEmail());
                 usuario.setSenha(updatedUsuario.getSenha());
                 usuario.setPerfil(updatedUsuario.getPerfil());
                 save(usuarios);
@@ -63,10 +65,40 @@ public class UsuarioPersistence implements Persistence<Usuario> {
         return usuarios;
     }
 
-    public Usuario findByName(String nomeUsuario) {
+    public Usuario findByName(String nome) {
         List<Usuario> usuarios = findAll();
         for (Usuario usuario : usuarios) {
-            if (usuario.getNomeUsuario().equals(nomeUsuario)) {
+            if (usuario.getNome().equals(nome)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public Usuario findByEmail(String email) {
+        List<Usuario> usuarios = findAll();
+        for (Usuario usuario : usuarios) {
+            if (usuario.getEmail().equals(email)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public Usuario findByCpf(String cpf) {
+        List<Usuario> usuarios = findAll();
+        for (Usuario usuario : usuarios) {
+            if (usuario.getCpf().equals(cpf)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public Usuario findById(Number id) {
+        List<Usuario> usuarios = findAll();
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId().equals(id)) {
                 return usuario;
             }
         }
@@ -77,14 +109,14 @@ public class UsuarioPersistence implements Persistence<Usuario> {
         List<Usuario> allUsers = findAll();
         Usuario loggedInUser = GerenciadorSessao.getUsuarioLogado();
 
-        allUsers.removeIf(usuario -> usuario.getNomeUsuario().equals(loggedInUser.getNomeUsuario()));
+        allUsers.removeIf(usuario -> usuario.getNome().equals(loggedInUser.getNome()));
 
         return allUsers;
     }
 
     public void removeUsuario(Usuario usuario) {
         List<Usuario> usuarios = findAll();
-        usuarios.removeIf(u -> u.getNomeUsuario().equals(usuario.getNomeUsuario()));
+        usuarios.removeIf(u -> u.getNome().equals(usuario.getNome()));
         save(usuarios);
     }
 

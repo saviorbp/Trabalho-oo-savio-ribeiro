@@ -1,1 +1,1 @@
-[{"id":1,"nomeUsuario":"savior","senha":"Srbp9828!","perfil":"ADMINISTRADOR"}]
+[{"id":1,"nome":"Savio","sobrenome":"Ribeiro","cpf":"123.123.123-11","email":"savio@gmail.com","senha":"Srbp9828!","perfil":"ADMINISTRADOR"},{"id":2,"nome":"test","sobrenome":"test","cpf":"123.321.321-11","email":"teste@gmail.com","senha":"Srbp9828!","perfil":"SUPERVISOR"}]

@@ -1,7 +1,5 @@
 package trabalho.controller;
 
-import trabalho.model.Usuario;
-
 public class ValidaTicket {
 
   public static void validaTitulo(String titulo) {
@@ -16,9 +14,9 @@ public class ValidaTicket {
     }
   }
 
-  public static void validaUsuario(Usuario usuario) {
-    if (usuario == null) {
-      throw new IllegalArgumentException("O usuário do ticket não pode ser em vazia");
+  public static void validaUsuarioVinculado(Integer idUsuarioVinculado){
+    if (idUsuarioVinculado == null) {
+      throw new IllegalArgumentException("O usuário vinculado não pode ser nulo");
     }
   }
 
@@ -28,6 +26,7 @@ public class ValidaTicket {
     }
     return;
   }
+
   public static void editarTicketError(String ex) {
     if (ex != null) {
       throw new IllegalArgumentException("Erro ao editar o ticket" + ex);

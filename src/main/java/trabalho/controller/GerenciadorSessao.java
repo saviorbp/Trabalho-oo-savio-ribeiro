@@ -1,5 +1,8 @@
 package trabalho.controller;
-import trabalho.model.Usuario;
+
+import trabalho.model.Usuarios.PerfilUsuario;
+import trabalho.model.Usuarios.Usuario;
+
 public class GerenciadorSessao {
     private static Usuario usuarioLogado;
 
@@ -11,11 +14,19 @@ public class GerenciadorSessao {
         return usuarioLogado;
     }
 
+    public static Integer getIdUsuarioLogado() {
+        return usuarioLogado.getId();
+    }
+
     public static void encerrarSessao() {
         usuarioLogado = null;
     }
 
     public static boolean isUsuarioLogado() {
         return usuarioLogado != null;
+    }
+
+    public static PerfilUsuario getPerfilUsuarioLogado() {
+        return usuarioLogado.getPerfil();
     }
 }

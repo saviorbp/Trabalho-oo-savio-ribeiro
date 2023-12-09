@@ -1,4 +1,4 @@
-package trabalho.model;
+package trabalho.model.Usuarios;
 
 public enum PerfilUsuario {
     ADMINISTRADOR,

@@ -1,7 +1,8 @@
 package trabalho.persistence;
 
 import com.google.gson.reflect.TypeToken;
-import trabalho.model.Ticket;
+
+import trabalho.model.Tickets.Ticket;
 import trabalho.util.Arquivo;
 import com.google.gson.Gson;
 
@@ -52,7 +53,8 @@ public class TicketPersistence implements Persistence<Ticket> {
             if (ticket.getId().equals(id)) {
                 ticket.setTitulo(updatedTicket.getTitulo());
                 ticket.setDescricao(updatedTicket.getDescricao());
-                ticket.setUsuario(updatedTicket.getUsuario());
+                ticket.setIdUsuarioCriou(updatedTicket.getIdUsuarioCriou());
+                ticket.setIdUsuarioVinculado(updatedTicket.getIdUsuarioVinculado());
                 save(tickets);
                 return true;
             }
