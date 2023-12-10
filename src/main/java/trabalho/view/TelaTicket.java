@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                                   
+//201976013                                                    
 package trabalho.view;
 
 import javax.swing.*;
@@ -54,7 +56,8 @@ public class TelaTicket extends JFrame {
 
   private JPanel desenhaListaTicketsCriados(int idUsuarioLogado) {
     JPanel painel = new JPanel();
-    painel.setBorder(BorderFactory.createTitledBorder("Tickets Criados por " + GerenciadorSessao.getUsuarioLogado().getNome()));
+    painel.setBorder(
+        BorderFactory.createTitledBorder("Tickets Criados por " + GerenciadorSessao.getUsuarioLogado().getNome()));
     painel.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT));
     painel.setLayout(new BorderLayout());
 
@@ -96,7 +99,8 @@ public class TelaTicket extends JFrame {
 
   private JPanel desenhaListaTicketsVinculados(int idUsuarioLogado) {
     JPanel painel = new JPanel();
-    painel.setBorder(BorderFactory.createTitledBorder("Tickets Vinculados a " + GerenciadorSessao.getUsuarioLogado().getNome()));
+    painel.setBorder(
+        BorderFactory.createTitledBorder("Tickets Vinculados a " + GerenciadorSessao.getUsuarioLogado().getNome()));
     painel.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT));
     painel.setLayout(new BorderLayout());
 

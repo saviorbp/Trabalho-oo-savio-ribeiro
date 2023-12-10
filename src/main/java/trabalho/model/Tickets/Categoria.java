@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                                
+//201976013                                                     
 package trabalho.model.Tickets;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class Categoria {
     this.id = id;
     this.nome = nome;
   }
-  
+
   public Categoria(int id, String nome, List<String> subcategorias) {
     this.id = id;
     this.nome = nome;
@@ -44,6 +46,6 @@ public class Categoria {
 
   @Override
   public String toString() {
-      return this.nome;
+    return this.nome;
   }
 }

@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                                     
+//201976013                                                             
 package trabalho.view;
 
 import javax.swing.*;
@@ -7,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import trabalho.controller.GerenciadorSessao;
-import trabalho.controller.ValidaTicket;
+import trabalho.exception.ValidaTicket;
 import trabalho.model.Tickets.Ticket;
 import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.TicketPersistence;
@@ -48,13 +50,13 @@ public class TelaEditarTicket extends JFrame {
         add(seletorUsuario);
 
         add(new JLabel("Categoria:"));
-        JLabel labelCategoria = new JLabel(ticket.getCategoria().getNome()); 
-                                                                            
+        JLabel labelCategoria = new JLabel(ticket.getCategoria().getNome());
+
         add(labelCategoria);
 
         add(new JLabel("Subcategoria:"));
-        JLabel labelSubcategoria = new JLabel(ticket.getSubcategoria().getNome()); 
-                                                                         
+        JLabel labelSubcategoria = new JLabel(ticket.getSubcategoria().getNome());
+
         add(labelSubcategoria);
 
         add(new JLabel("Descrição:"));

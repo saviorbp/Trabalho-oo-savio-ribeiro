@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                                 
+//201976013                                                    
 package trabalho.model.Tickets;
 
 import java.util.ArrayList;
@@ -84,19 +86,19 @@ public class InitCategoria {
     }
 
     // public Subcategoria getSubcategoriaPorNome(String nome) {
-    //     for (Subcategoria subcategoria : getSubcategorias()) {
-    //         if (subcategoria.getNome().equals(nome)) {
-    //             return subcategoria;
-    //         }
-    //     }
-    //     return null;
+    // for (Subcategoria subcategoria : getSubcategorias()) {
+    // if (subcategoria.getNome().equals(nome)) {
+    // return subcategoria;
+    // }
+    // }
+    // return null;
     // }
 
     // public List<Subcategoria> getSubcategorias() {
-    //     List<Subcategoria> subcategorias = new ArrayList<>();
-    //     for (Categoria categoria : getCategorias()) {
-    //         subcategorias.addAll(categoria.getSubcategorias());
-    //     }
-    //     return subcategorias;
+    // List<Subcategoria> subcategorias = new ArrayList<>();
+    // for (Categoria categoria : getCategorias()) {
+    // subcategorias.addAll(categoria.getSubcategorias());
+    // }
+    // return subcategorias;
     // }
 }

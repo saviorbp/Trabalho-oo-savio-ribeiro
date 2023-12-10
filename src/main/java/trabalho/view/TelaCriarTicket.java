@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                                      
+//201976013                                                             
 package trabalho.view;
 
 import javax.swing.*;
@@ -10,7 +12,6 @@ import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import trabalho.controller.ValidaTicket;
 import trabalho.model.Tickets.Categoria;
 import trabalho.model.Tickets.InitCategoria;
 import trabalho.model.Tickets.Subcategoria;
@@ -20,6 +21,7 @@ import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.UsuarioPersistence;
 import trabalho.persistence.TicketPersistence;
 import trabalho.controller.GerenciadorSessao;
+import trabalho.exception.ValidaTicket;
 
 public class TelaCriarTicket extends JFrame {
     private Map<PerfilUsuario, List<Categoria>> categoriasPorPerfil;
@@ -104,19 +106,21 @@ public class TelaCriarTicket extends JFrame {
                 ticket.setIdUsuarioCriou(GerenciadorSessao.getIdUsuarioLogado());
                 ticket.setIdUsuarioVinculado(usuarios.get(seletorUsuario.getSelectedIndex()).getId());
                 ticket.setCategoria((Categoria) seletorCategoria.getSelectedItem());
-                // String nomeSubcategoriaSelecionada = (String) seletorSubcategoria.getSelectedItem();
-                // List<Subcategoria> todasSubcategorias = new InitCategoria().getSubcategorias();
+                // String nomeSubcategoriaSelecionada = (String)
+                // seletorSubcategoria.getSelectedItem();
+                // List<Subcategoria> todasSubcategorias = new
+                // InitCategoria().getSubcategorias();
                 // Subcategoria subcategoriaSelecionada = null;
                 // for (Subcategoria subcategoria : todasSubcategorias) {
-                //     if (subcategoria.getNome().equals(nomeSubcategoriaSelecionada)) {
-                //         subcategoriaSelecionada = subcategoria;
-                //         break;
-                //     }
+                // if (subcategoria.getNome().equals(nomeSubcategoriaSelecionada)) {
+                // subcategoriaSelecionada = subcategoria;
+                // break;
+                // }
                 // }
                 // if (subcategoriaSelecionada != null) {
-                //     ticket.setSubcategoria(subcategoriaSelecionada);
+                // ticket.setSubcategoria(subcategoriaSelecionada);
                 // } else {
-                //     throw new RuntimeException("Subcategoria não encontrada");
+                // throw new RuntimeException("Subcategoria não encontrada");
                 // }
                 ValidaTicket.validaTitulo(ticket.getTitulo());
                 ValidaTicket.validaDescricao(ticket.getDescricao());

@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                     
+//201976013                                       
 package trabalho.view;
 
 import javax.swing.*;
@@ -6,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-import trabalho.controller.ValidarUsuario;
+import trabalho.exception.ValidarUsuario;
 import trabalho.model.Usuarios.PerfilUsuario;
 import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.UsuarioPersistence;
@@ -72,7 +74,7 @@ public class TelaCriarUsuario {
                     List<Usuario> usuarios = usuarioPersistence.findAll();
                     usuarios.add(novoUsuario);
                     usuarioPersistence.save(usuarios);
-                    
+
                     JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
                     new TelaLogin().setVisible(true);
                     frame.dispose();

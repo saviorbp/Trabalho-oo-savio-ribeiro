@@ -1,4 +1,6 @@
-package trabalho.controller;
+//Sávio Ribeiro de Barros Pereira                              
+//201976013                                                      
+package trabalho.exception;
 
 public class ValidaTicket {
 
@@ -14,7 +16,7 @@ public class ValidaTicket {
     }
   }
 
-  public static void validaUsuarioVinculado(Integer idUsuarioVinculado){
+  public static void validaUsuarioVinculado(Integer idUsuarioVinculado) {
     if (idUsuarioVinculado == null) {
       throw new IllegalArgumentException("O usuário vinculado não pode ser nulo");
     }

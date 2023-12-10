@@ -1,10 +1,11 @@
+//Sávio Ribeiro de Barros Pereira                                      
+//201976013                                                           
 package trabalho.persistence;
 
 import com.google.gson.reflect.TypeToken;
 
 import trabalho.controller.GerenciadorSessao;
 import trabalho.model.Usuarios.Usuario;
-import trabalho.util.Arquivo;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -27,7 +28,7 @@ public class UsuarioPersistence implements Persistence<Usuario> {
 
         Arquivo.salva(PATH, json);
     }
-   
+
     public Boolean update(Number id, Usuario updatedUsuario) {
         List<Usuario> usuarios = findAll();
         for (Usuario usuario : usuarios) {
@@ -43,7 +44,6 @@ public class UsuarioPersistence implements Persistence<Usuario> {
         }
         return false;
     }
-
 
     @Override
     public List<Usuario> findAll() {

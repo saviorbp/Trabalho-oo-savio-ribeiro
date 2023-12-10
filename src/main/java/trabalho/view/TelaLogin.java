@@ -1,10 +1,12 @@
+//Sávio Ribeiro de Barros Pereira   
+//201976013                                                                                                                                 
 package trabalho.view;
 
 import javax.swing.*;
 
 import trabalho.controller.GerenciadorSessao;
 import trabalho.persistence.UsuarioPersistence;
-import trabalho.controller.ValidarUsuario;
+import trabalho.exception.ValidarUsuario;
 import trabalho.exception.ValidacaoException;
 import trabalho.model.Usuarios.Usuario;
 

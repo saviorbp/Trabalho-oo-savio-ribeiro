@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                                         
+//201976013                                                            
 package trabalho.model.Usuarios;
 
 public class Usuario {
@@ -9,8 +11,9 @@ public class Usuario {
   private String email;
   private String senha;
   private PerfilUsuario perfil;
-  
-  public Usuario(Integer id, String senha, PerfilUsuario perfil, String nome, String sobrenome, String email, String cpf) {
+
+  public Usuario(Integer id, String senha, PerfilUsuario perfil, String nome, String sobrenome, String email,
+      String cpf) {
     this.id = id;
     this.nome = nome;
     this.sobrenome = sobrenome;
@@ -22,7 +25,7 @@ public class Usuario {
 
   public Usuario() {
   }
-  
+
   public String getSenha() {
     return senha;
   }

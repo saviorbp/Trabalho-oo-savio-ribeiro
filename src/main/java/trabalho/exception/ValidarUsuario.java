@@ -1,6 +1,7 @@
-package trabalho.controller;
+//Sávio Ribeiro de Barros Pereira                                        
+//201976013                                                               
+package trabalho.exception;
 
-import trabalho.exception.ValidacaoException;
 import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.UsuarioPersistence;
 import java.util.List;
@@ -13,7 +14,8 @@ public class ValidarUsuario {
     for (Usuario usuarioExistente : usuarios) {
       String emailExistente = usuarioExistente.getEmail();
       String senhaExistente = usuarioExistente.getSenha();
-      if (emailExistente != null && emailExistente.equals(email) && senhaExistente != null && senhaExistente.equals(senha)) {
+      if (emailExistente != null && emailExistente.equals(email) && senhaExistente != null
+          && senhaExistente.equals(senha)) {
         return true;
       }
     }

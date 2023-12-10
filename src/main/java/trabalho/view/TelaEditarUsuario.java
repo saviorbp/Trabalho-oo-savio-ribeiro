@@ -1,3 +1,5 @@
+//Sávio Ribeiro de Barros Pereira                                    
+//201976013                                                           
 package trabalho.view;
 
 import javax.swing.*;
@@ -6,8 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import trabalho.controller.ValidarUsuario;
 import trabalho.exception.ValidacaoException;
+import trabalho.exception.ValidarUsuario;
 import trabalho.model.Usuarios.PerfilUsuario;
 import trabalho.model.Usuarios.Usuario;
 import trabalho.persistence.UsuarioPersistence;
@@ -65,7 +67,7 @@ public class TelaEditarUsuario {
 
                     String nome = campoNome.getText();
                     if (!nome.equals(usuarioLogado.getNome())) {
-                        ValidarUsuario.validarNome(nome); 
+                        ValidarUsuario.validarNome(nome);
                         isEdited = true;
                     }
 
@@ -86,18 +88,18 @@ public class TelaEditarUsuario {
                         ValidarUsuario.validarCpf(cpf);
                         isEdited = true;
                     }
-                    
+
                     String senha = new String(campoSenha.getPassword());
                     if (!senha.equals(usuarioLogado.getSenha())) {
                         ValidarUsuario.validarSenha(senha);
                         isEdited = true;
                     }
-                    
+
                     PerfilUsuario perfil = (PerfilUsuario) campoPerfil.getSelectedItem();
                     if (!perfil.equals(usuarioLogado.getPerfil())) {
                         isEdited = true;
                     }
-                    
+
                     if (isEdited) {
                         novoUsuario.setNome(nome);
                         novoUsuario.setSobrenome(sobrenome);

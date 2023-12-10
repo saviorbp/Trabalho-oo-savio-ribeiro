@@ -1,8 +1,10 @@
+//Sávio Ribeiro de Barros Pereira                                      
+//201976013                                                          
 package trabalho.persistence;
 
 import com.google.gson.reflect.TypeToken;
 import trabalho.model.Tickets.Categoria;
-import trabalho.util.Arquivo;
+
 import com.google.gson.Gson;
 
 import java.io.File;
